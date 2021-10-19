@@ -36,12 +36,10 @@ async def on_guild_remove(guild):
 @client.command()
 async def 接続(ctx):
     global connected_channel
-    
-     if ctx.author.voice is None:
+    if ctx.author.voice is None:
         await ctx.channel.send(f"{ctx.author.mention}さんはボイスチャンネルに接続していません")
         logger.info(f"{ctx.author}さんはボイスチャンネルに接続していません")
         return
-
     if ctx.guild.voice_client is not None:
         await ctx.guild.voice_client.move_to(ctx.author.voice.channel)
         embed = discord.Embed(title="読み上げ開始", inline="false", color=0x3399cc)
@@ -51,7 +49,6 @@ async def 接続(ctx):
         logger.info(f"{ctx.author.voice.channel.name}に接続しました")
         connected_channel[ctx.guild] = ctx.channel
         return
-
     await ctx.author.voice.channel.connect()
     embed = discord.Embed(title="読み上げ開始", inline="false", color=0x3399cc)
     embed.add_field(name="テキストチャンネル", value=f"{ctx.channel.name}", inline="false")
