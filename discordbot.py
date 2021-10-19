@@ -7,6 +7,7 @@ import urllib.parse
 import re
 import emoji
 import json
+from logging import  getLogger
 
 prefix = os.getenv('DISCORD_BOT_PREFIX', default='🦑')
 lang = os.getenv('DISCORD_BOT_LANG', default='ja')
@@ -17,6 +18,7 @@ with open('emoji_ja.json', encoding='utf-8') as file:
     
 channel = {} # テキストチャンネルID
 connected_channel = {}
+logger = getLogger(__name__)
 
 @client.event
 async def on_ready():
@@ -49,6 +51,7 @@ async def 接続(ctx):
         logger.info(f"{ctx.author.voice.channel.name}に接続しました")
         connected_channel[ctx.guild] = ctx.channel
         return
+    
     await ctx.author.voice.channel.connect()
     embed = discord.Embed(title="読み上げ開始", inline="false", color=0x3399cc)
     embed.add_field(name="テキストチャンネル", value=f"{ctx.channel.name}", inline="false")
@@ -56,6 +59,7 @@ async def 接続(ctx):
     await ctx.send(embed=embed)
     logger.info(f"{ctx.author.voice.channel.name}に接続しました")
     connected_channel[ctx.guild] = ctx.channel
+    
 
 @client.command()
 async def 切断(ctx):
@@ -73,6 +77,7 @@ async def 切断(ctx):
 
 @client.event
 async def on_message(message):
+    global connected_channel
     #if message.channel == channel: 
         #return
     if message.author.bot:
