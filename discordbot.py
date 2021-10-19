@@ -14,6 +14,8 @@ token = os.environ['DISCORD_BOT_TOKEN']
 client = commands.Bot(command_prefix=prefix)
 with open('emoji_ja.json', encoding='utf-8') as file:
     emoji_dataset = json.load(file)
+    
+channel = {}
 
 @client.event
 async def on_ready():
@@ -32,6 +34,7 @@ async def on_guild_remove(guild):
 
 @client.command()
 async def 接続(ctx):
+    global channel
     if ctx.message.guild:
         if ctx.author.voice is None:
             await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
@@ -56,6 +59,10 @@ async def 切断(ctx):
 
 @client.event
 async def on_message(message):
+    if message.channel == channel: 
+        return
+    if message.author.bot:
+        return
     if message.content.startswith(prefix):
         pass
     else:
