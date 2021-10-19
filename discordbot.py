@@ -35,29 +35,44 @@ async def on_guild_remove(guild):
 
 @client.command()
 async def 接続(ctx):
-    if ctx.message.guild:
-        if ctx.author.voice is None:
-            await ctx.send('ボイスチャンネルに接続してから呼び出してください。')
-        else:
-            global connected_channel
-            if ctx.guild.voice_client:
-                if ctx.author.voice.channel == ctx.guild.voice_client.channel:
-                    await ctx.send('接続済みです。')
-                else:
-                    await ctx.voice_client.disconnect()
-                    await asyncio.sleep(0.5)
-                    await ctx.author.voice.channel.connect()
-                    connected_channel[ctx.guild] = ctx.channel
-            else:
-                await ctx.author.voice.channel.connect()
+     if ctx.author.voice is None:
+        await ctx.channel.send(f"{ctx.author.mention}さんはボイスチャンネルに接続していません")
+        logger.info(f"{ctx.author}さんはボイスチャンネルに接続していません")
+        return
+
+    global connected_channel
+
+    if ctx.guild.voice_client is not None:
+        await ctx.guild.voice_client.move_to(ctx.author.voice.channel)
+        embed = discord.Embed(title="読み上げ開始", inline="false", color=0x3399cc)
+        embed.add_field(name="テキストチャンネル", value=f"{ctx.channel.name}", inline="false")
+        embed.add_field(name="ボイスチャンネル", value=f"{ctx.author.voice.channel.name}", inline="false")
+        await ctx.send(embed=embed)
+        logger.info(f"{ctx.author.voice.channel.name}に接続しました")
+        connected_channel[ctx.guild] = ctx.channel
+        return
+
+    await ctx.author.voice.channel.connect()
+    embed = discord.Embed(title="読み上げ開始", inline="false", color=0x3399cc)
+    embed.add_field(name="テキストチャンネル", value=f"{ctx.channel.name}", inline="false")
+    embed.add_field(name="ボイスチャンネル", value=f"{ctx.author.voice.channel.name}", inline="false")
+    await ctx.send(embed=embed)
+    logger.info(f"{ctx.author.voice.channel.name}に接続しました")
+    connected_channel[ctx.guild] = ctx.channel
 
 @client.command()
 async def 切断(ctx):
-    if ctx.message.guild:
-        if ctx.voice_client is None:
-            await ctx.send('ボイスチャンネルに接続していません。')
-        else:
-            await ctx.voice_client.disconnect()
+    if ctx.guild.voice_client is None:
+        await ctx.channel.send("ボイスチャンネルに接続していません")
+        logger.info(f"ボイスチャンネルに接続していません")
+        return
+
+    await ctx.guild.voice_client.disconnect()
+    await ctx.channel.send("切断しました")
+    logger.info(f"切断しました")
+    connected_channel.pop(ctx.guild)
+            
+            
 
 @client.event
 async def on_message(message):
@@ -69,59 +84,61 @@ async def on_message(message):
         pass
     else:
         if message.channel in connected_channel.values() and message.guild.voice_client is not None:
-        if message.guild.voice_client:
-            text = message.content
-            text = text.replace('\n', '、')
-            text = re.sub(r'[\U0000FE00-\U0000FE0F]', '', text)
-            text = re.sub(r'[\U0001F3FB-\U0001F3FF]', '', text)
-            for char in text:
-                if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset:
-                    text = text.replace(char, emoji_dataset[char]['short_name'])
-            pattern = r'<@(\d+)>'
-            match = re.findall(pattern, text)
-            for user_id in match:
-                user = await client.fetch_user(user_id)
-                user_name = f'、{user.name}へのメンション、'
-                text = re.sub(f'<@{user_id}>', user_name, text)
-            pattern = r'<@&(\d+)>'
-            match = re.findall(pattern, text)
-            for role_id in match:
-                role = message.guild.get_role(int(role_id))
-                role_name = f'、{role.name}へのメンション、'
-                text = re.sub(f'<@&{role_id}>', role_name, text)
-            pattern = r'<:([a-zA-Z0-9_]+):\d+>'
-            match = re.findall(pattern, text)
-            for emoji_name in match:
-                emoji_read_name = emoji_name.replace('_', ' ')
-                text = re.sub(rf'<:{emoji_name}:\d+>', f'、{emoji_read_name}、', text)
-            pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
-            text = re.sub(pattern, '画像', text)
-            pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
-            text = re.sub(pattern, '、画像', text)
-            pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
-            text = re.sub(pattern, '、URL', text)
-            #text = message.author.name + '、' + text
-            pattern = r'七七'
-            text = re.sub(pattern, '、なな', text)
-            pattern = r'原神'
-            text = re.sub(pattern, '、げんしん', text)
-            if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
-                while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
-                    text = text[:-1]
-                text = text[:-1] + '、ワラ'
-            for attachment in message.attachments:
-                if attachment.filename.endswith((".jpg", ".jpeg", ".gif", ".png", ".bmp")):
-                    text += '、画像'
+            if message.guild.voice_client:
+                text = message.content
+                text = text.replace('\n', '、')
+                text = re.sub(r'[\U0000FE00-\U0000FE0F]', '', text)
+                text = re.sub(r'[\U0001F3FB-\U0001F3FF]', '', text)
+                for char in text:
+                    if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset:
+                        text = text.replace(char, emoji_dataset[char]['short_name'])                
+                pattern = r'<@(\d+)>'
+                match = re.findall(pattern, text)
+                for user_id in match:
+                    user = await client.fetch_user(user_id)
+                    user_name = f'、{user.name}へのメンション、'
+                    text = re.sub(f'<@{user_id}>', user_name, text)
+                pattern = r'<@&(\d+)>'
+                match = re.findall(pattern, text)
+                for role_id in match:
+                    role = message.guild.get_role(int(role_id))
+                    role_name = f'、{role.name}へのメンション、'
+                    text = re.sub(f'<@&{role_id}>', role_name, text)
+                pattern = r'<:([a-zA-Z0-9_]+):\d+>'
+                match = re.findall(pattern, text)
+                for emoji_name in match:
+                    emoji_read_name = emoji_name.replace('_', ' ')
+                    text = re.sub(rf'<:{emoji_name}:\d+>', f'、{emoji_read_name}、', text)
+                pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
+                text = re.sub(pattern, '画像', text)
+                pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
+                text = re.sub(pattern, '、画像', text)
+                pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
+                text = re.sub(pattern, '、URL', text)
+                #text = message.author.name + '、' + text
+                pattern = r'七七'
+                text = re.sub(pattern, '、なな', text)
+                pattern = r'原神'
+                text = re.sub(pattern, '、げんしん', text)
+                if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
+                    while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
+                        text = text[:-1]
+                    text = text[:-1] + '、ワラ'
+                for attachment in message.attachments:
+                    if attachment.filename.endswith((".jpg", ".jpeg", ".gif", ".png", ".bmp")):
+                        text += '、画像'
+                    else:
+                        text += '、添付ファイル'
+                if len(text) < 100:
+                    s_quote = urllib.parse.quote(text)
+                    mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
+                    while message.guild.voice_client.is_playing():
+                        await asyncio.sleep(0.5)
+                    message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
                 else:
-                    text += '、添付ファイル'
-            if len(text) < 100:
-                s_quote = urllib.parse.quote(text)
-                mp3url = f'http://translate.google.com/translate_tts?ie=UTF-8&q={s_quote}&tl={lang}&client=tw-ob'
-                while message.guild.voice_client.is_playing():
-                    await asyncio.sleep(0.5)
-                message.guild.voice_client.play(discord.FFmpegPCMAudio(mp3url))
+                    await message.channel.send('100文字以上は読み上げできません。')
             else:
-                await message.channel.send('100文字以上は読み上げできません。')
+                pass
         else:
             pass
     await client.process_commands(message)
