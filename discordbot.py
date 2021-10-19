@@ -63,23 +63,16 @@ async def 接続(ctx):
 
 @client.command()
 async def 切断(ctx):
-    if ctx.guild.voice_client is None:
-        await ctx.channel.send("ボイスチャンネルに接続していません")
-        logger.info(f"ボイスチャンネルに接続していません")
-        return
-
-    await ctx.guild.voice_client.disconnect()
-    await ctx.channel.send("切断しました")
-    logger.info(f"切断しました")
-    connected_channel.pop(ctx.guild)
-            
+    if ctx.message.guild:
+        if ctx.voice_client is None:
+            await ctx.send('ボイスチャンネルに接続していません。')
+        else:
+            await ctx.voice_client.disconnect()
             
 
 @client.event
 async def on_message(message):
     global connected_channel
-    #if message.channel == channel: 
-        #return
     if message.author.bot:
         return
     if message.content.startswith(prefix):
