@@ -90,7 +90,7 @@ async def on_message(message):
             text = re.sub(pattern, '、画像', text)
             pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
             text = re.sub(pattern, '、URL', text)
-            text = message.author.name + '、' + text
+            #text = message.author.name + '、' + text
             if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
                 while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
                     text = text[:-1]
