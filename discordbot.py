@@ -119,6 +119,10 @@ async def on_message(message):
                     while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
                         text = text[:-1]
                     text = text[:-1] + '、ワラ'
+                if text[-1:] == '?' or text[-1:] == '？' or text[-1:] == '?' or text[-1:] == '？':
+                    while text[-2:-1] == '?' or text[-2:-1] == '？' or text[-2:-1] == '？' or text[-2:-1] == '?':
+                        text = text[:-1]
+                    text = text[:-1] + '、はてな'
                 for attachment in message.attachments:
                     if attachment.filename.endswith((".jpg", ".jpeg", ".gif", ".png", ".bmp")):
                         text += '、画像'
