@@ -38,7 +38,7 @@ async def on_guild_remove(guild):
     
 @client.command()
 async def 辞書(ctx, arg1, arg2):
-    with open('open_jtalk/bin/dic.txt', mode='a') as f:
+    with open('dic.txt', mode='a') as f:
         f.write('\n'+ arg1 + ',' + arg2)
         print('dic.txtに書き込み：''\n'+ arg1 + ',' + arg2)
     await ctx.send('`' + arg1+'` を `'+arg2+'` として登録しました')
