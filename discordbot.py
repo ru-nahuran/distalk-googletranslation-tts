@@ -34,6 +34,16 @@ async def on_guild_join(guild):
 async def on_guild_remove(guild):
     presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
+    
+    
+@client.command()
+async def 辞書(ctx, arg1, arg2):
+    with open('C:/open_jtalk/bin/dic.txt', mode='a') as f:
+        f.write('\n'+ arg1 + ',' + arg2)
+        print('dic.txtに書き込み：''\n'+ arg1 + ',' + arg2)
+    await ctx.send('`' + arg1+'` を `'+arg2+'` として登録しました')
+    
+    
 
 @client.command()
 async def 接続(ctx):
