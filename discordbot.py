@@ -129,6 +129,10 @@ async def on_message(message):
                 text = re.sub(pattern, '、ここいろ', text)
                 pattern = r'みー様'
                 text = re.sub(pattern, '、みーさま', text)
+                pattern = r'？'
+                text = re.sub(pattern, '、はてな', text)
+                pattern = r'?'
+                text = re.sub(pattern, '、はてな', text)
                 if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
                     while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
                         text = text[:-1]
