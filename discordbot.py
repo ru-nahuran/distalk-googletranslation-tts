@@ -131,6 +131,8 @@ async def on_message(message):
                 text = re.sub(pattern, '、みーさま', text)
                 pattern = r'魈'
                 text = re.sub(pattern, '、しょう', text)
+                pattern = r'万葉'
+                text = re.sub(pattern, '、かずは', text)
                 if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
                     while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
                         text = text[:-1]
