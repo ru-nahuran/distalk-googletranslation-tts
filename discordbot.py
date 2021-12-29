@@ -248,7 +248,7 @@ async def on_command_error(ctx, error):
     await ctx.send(error_msg)
 
 @commands.command()
-    async def yt(self, ctx, *, url):
+    async def 音楽(self, ctx, *, url):
         """Plays from a url (almost anything youtube_dl supports)"""
 
         async with ctx.typing():
