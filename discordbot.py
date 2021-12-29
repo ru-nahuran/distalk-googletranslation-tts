@@ -250,11 +250,9 @@ async def on_command_error(ctx, error):
 @commands.command()
     async def 音楽(self, ctx, *, url):
         """Plays from a url (almost anything youtube_dl supports)"""
-
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
-
         await ctx.send('Now playing: {}'.format(player.title))
 
     
