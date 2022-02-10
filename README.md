@@ -1,4 +1,6 @@
-# Distalk
-Discord TTS on Heroku powered by Google Translation Text-to-Speech API.
+# Discord.py-localSoundPlayer
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+Discord.pyでローカルのファイルを再生するBotです。
+
+今思ったけど実装ゴミですね。
+動いてるからいいけど、最後のFor文はif判定させた方が良いです。
