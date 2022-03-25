@@ -34,9 +34,7 @@ async def on_guild_join(guild):
 async def on_guild_remove(guild):
     presence = f'{prefix}ヘルプ | {len(client.voice_clients)}/{len(client.guilds)}サーバー'
     await client.change_presence(activity=discord.Game(name=presence))
-    
-client = discord.Client()
-CHANNEL_PREFIX = "private_"
+
     
 @client.event
 async def on_voice_state_update(member, before, after):
