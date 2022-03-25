@@ -36,6 +36,8 @@ async def on_guild_remove(guild):
     await client.change_presence(activity=discord.Game(name=presence))
 
     
+CHANNEL_PREFIX = "private_"
+
 @client.event
 async def on_voice_state_update(member, before, after):
     # チャンネルを移動していない場合処理をしない
