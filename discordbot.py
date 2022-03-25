@@ -38,8 +38,7 @@ async def on_guild_remove(guild):
 module.exports = {
     onVoiceStateUpdate: onVoiceStateUpdate
 };
-    
-const BOT_ROLE_NAME = "BOT";
+  
 
 async function onVoiceStateUpdate(oldState, newState) {
   if (oldState.channelID === newState.channelID) {
