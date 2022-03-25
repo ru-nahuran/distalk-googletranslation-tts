@@ -133,17 +133,7 @@ async def _channel_exit(member, voiceChannel):
     if target is not None:
         # 該当メンバーの読取権限を取り消し
         await target.set_permissions(member, overwrite=None)
-
-
-# 入室時にメンションを飛ばして案内したい
-async def _channel_send_join(member, voiceChannel):
-    target = _channel_find(voiceChannel)
-    if target is not None:
-        await target.send(member.mention + "通話中のチャットはこちらをお使いください")
-    
-    
-    
-    
+  
     
     
 @client.command()
