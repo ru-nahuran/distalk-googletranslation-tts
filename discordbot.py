@@ -37,6 +37,7 @@ async def on_guild_remove(guild):
 
     
 CHANNEL_PREFIX = "private_"
+BOT_ROLE_NAME = "bot"
 
 @client.event
 async def on_voice_state_update(member, before, after):
