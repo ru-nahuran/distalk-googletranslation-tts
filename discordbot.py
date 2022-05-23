@@ -148,6 +148,10 @@ async def on_message(message):
                 text = re.sub(pattern, '、ばんがんけつろく', text)
                 pattern = r'層岩巨淵'
                 text = re.sub(pattern, '、そうがんきょえん', text)
+                pattern = r'ct'
+                text = re.sub(pattern, '、しーてぃー', text)
+                pattern = r'四風原典'
+                text = re.sub(pattern, '、しふうげんてん', text)
                 if text[-1:] == 'w' or text[-1:] == 'W' or text[-1:] == 'ｗ' or text[-1:] == 'W':
                     while text[-2:-1] == 'w' or text[-2:-1] == 'W' or text[-2:-1] == 'ｗ' or text[-2:-1] == 'W':
                         text = text[:-1]
