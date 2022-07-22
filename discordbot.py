@@ -100,8 +100,8 @@ async def on_message(message):
                         #text = text.replace(char, emoji_dataset[char]['short_name'])                
                 #pattern = r'<@(\d+)>'
                 #match = re.findall(pattern, text)
-               user = await client.fetch_user(user_id)
-               user_name = f'、{user.name}へのメンション、'
+               #user = await client.fetch_user(user_id)
+               #user_name = f'、{user.name}へのメンション、'
                text = re.sub(f'<@{user_id}>', user_name, text)
                 pattern = r'<@&(\d+)>'
                 match = re.findall(pattern, text)
