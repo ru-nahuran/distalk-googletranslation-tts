@@ -95,16 +95,6 @@ async def on_message(message):
                 text = text.replace('\n', '、')
                 text = re.sub(r'[\U0000FE00-\U0000FE0F]', '', text)
                 text = re.sub(r'[\U0001F3FB-\U0001F3FF]', '', text)
-                for char in text:
-                    role_id in match
-                    role = message.guild.get_role(int(role_id))
-                    role_name = f'、{role.name}へのメンション、'
-                    text = re.sub(f'<@&{role_id}>', role_name, text)
-                pattern = r'<:([a-zA-Z0-9_]+):\d+>'
-                match = re.findall(pattern, text)
-                for emoji_name in match:
-                    emoji_read_name = emoji_name.replace('_', ' ')
-                    text = re.sub(rf'<:{emoji_name}:\d+>', f'、{emoji_read_name}、', text)
                 pattern = r'https://tenor.com/view/[\w/:%#\$&\?\(\)~\.=\+\-]+'
                 text = re.sub(pattern, '画像', text)
                 pattern = r'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+(\.jpg|\.jpeg|\.gif|\.png|\.bmp)'
