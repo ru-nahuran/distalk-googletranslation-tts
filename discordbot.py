@@ -98,8 +98,8 @@ async def on_message(message):
                 for char in text:
                     #if char in emoji.UNICODE_EMOJI['en'] and char in emoji_dataset:
                         #text = text.replace(char, emoji_dataset[char]['short_name'])                
-                pattern = r'<@(\d+)>'
-                match = re.findall(pattern, text)
+                #pattern = r'<@(\d+)>'
+                #match = re.findall(pattern, text)
                 for user_id in match:
                     user = await client.fetch_user(user_id)
                     user_name = f'、{user.name}へのメンション、'
